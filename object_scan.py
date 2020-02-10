@@ -3,15 +3,6 @@ import astra
 import time
 from imageio import imread, imwrite
 from matplotlib import pyplot as plt
-from scipy import misc
-
-from tomopy import shepp2d
-import pylops
-from gradient_operators import gradient_x, gradient_y, gradient_z
-from gradient_operators import even_gradient, odd_gradient
-from proximal_operators import prox_l1, prox_l2s
-from proximal_solvers import PDHG, operator_2norm
-
 
 # optomo fix
 def _matvec(self,v):
@@ -91,51 +82,6 @@ class ScanningObject:
             astra.algorithm.delete(alg_id)
 
             output = {'rec': astra.data3d.get(rec_id), 'time': elapsed_time, 'sino': proj_data}
-
-        elif rec_algorithm_param == 'TV3D':
-            projector_id = astra.create_projector('cuda3d', self.proj_geom, self.vol_geom)
-
-            W = astra.optomo.OpTomo(projector_id)
-            W = W * (1 / operator_2norm(W, max_iter=20))
-
-            phantom_param = phantom_param/255
-            p = W @ phantom_param.ravel()
-
-            #a = 0.0025
-            a = 0.0025
-
-            # gradient operator
-            i, j, k = gradient_x(10,128,128), gradient_y(10,128,128), gradient_z(10,128,128)
-            D = k
-            #D = pylops.VStack([j, k])
-            # D = D*(1/operator_2norm(W, max_iter=20))
-            # the stacked operator we will use in lin ADMM
-            A = pylops.VStack([W, D])
-
-            # proximal of zero function is identity
-            prox_f = lambda v, l: v
-
-            # proximal of g
-            prox_l2l1 = lambda v, l: np.concatenate([prox_l2s(v[:p.size], l), prox_l1(v[p.size:], a * l)])
-            p0 = np.concatenate([p, np.zeros(D.shape[0])])
-            prox_g = lambda v, l: p0 + prox_l2l1(v - p0, l)
-
-            op_norm = 1.1 * operator_2norm(A, 20)
-            print(op_norm)
-            sigma = tau = 0.9 ** 0.5 / op_norm
-
-            start_time = time.time()
-            rec = PDHG(prox_f, prox_g, A,
-                       np.zeros(phantom_param.size),
-                       np.zeros(A.shape[0]),
-                       sigma=sigma, tau=tau, theta=1,
-                       max_iter=200)
-
-            rec = rec.reshape(phantom_param.shape)
-            elapsed_time = time.time() - start_time
-            output = {'rec': rec, 'time': elapsed_time, 'sino': proj_data}
-
-
 
 
         astra.data3d.delete(rec_id)
