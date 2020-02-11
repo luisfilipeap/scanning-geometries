@@ -13,7 +13,7 @@
 # pilow_version         :5.4.1
 # ==============================================================================
 
-from imageio import imread
+from imageio import imread, imwrite
 from skimage.transform import resize
 from inline_setup_2D import InlineScanningSetup2D
 import astra
@@ -22,7 +22,7 @@ from scipy import misc
 from matplotlib import pyplot as plt
 
 
-class ScanningObject:
+class InlineScanningObject:
     """
     This class defines an inline scanning geometry and executes image reconstructions.
     Attributes
@@ -100,15 +100,20 @@ class ScanningObject:
 
 if __name__ == '__main__':
 
+
+    p = 120
+    a = 45
+
     plane = imread("test.tif")
     plane = resize(plane, (128, 128))
-
-    setup = ScanningObject(alpha_param=60, n_cells_param=519, n_proj_param=20, rec_size_param=128, omega_rotation=0)
+    setup = InlineScanningObject(alpha_param=a, n_cells_param=519, n_proj_param=p, rec_size_param=128, omega_rotation=0)
     out = setup.run(plane)
 
-    plt.figure()
-    plt.imshow(out['rec'], cmap='gray')
+    imwrite("linear_{}_projs_{}_fanbeam.png".format(p, a), out['rec'])
 
-    plt.axis('off')
-    plt.ioff()
-    plt.show()
+    #plt.figure()
+    #plt.imshow(out['rec'], cmap='gray')
+
+    #plt.axis('off')
+    #plt.ioff()
+    #plt.show()

@@ -46,7 +46,8 @@ class InlineScanningSetup2D:
 
         # d :  the center of the detector
         dX = np.linspace(-detector_cells / 2, detector_cells / 2, num=number_of_projections)
-        dY = np.linspace(-object_size / 2, -object_size / 2, num=number_of_projections)
+        #dY = np.linspace(-object_size / 2 , -object_size / 2, num=number_of_projections)
+        dY = np.linspace(-100, -100, num=number_of_projections)
 
         # u :  the vector between the centers of detector pixels 0 and 1
         uX = np.linspace(1, 1, num=number_of_projections)

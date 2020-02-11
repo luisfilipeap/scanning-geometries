@@ -1,12 +1,12 @@
 import astra
 from semi_circ_conveyor_belt_2D import SemiCircularConveyorBelt
 import time
-from imageio import imread
+from imageio import imread, imwrite
 from skimage.transform import resize
 from matplotlib import pyplot  as plt
 import numpy as np
 
-class ScanningObject:
+class CircularScanningObject:
     """
     This class defines an inline scanning geometry and executes image reconstructions.
     Attributes
@@ -66,24 +66,27 @@ class ScanningObject:
 if __name__ == '__main__':
 
 
-    plane = imread("test.tif")
+    p = 120
+    a = 45
 
+    plane = imread("test.tif")
     plane = resize(plane, (128, 128))
 
-    setup = ScanningObject(n_projs_param=20, src_dist_param=100, det_dist_param=100, fan_beam_param=60, radius_param=250, rec_size_param=128)
-    print(setup.setup.get_det_size())
+    setup = CircularScanningObject(n_projs_param=p, src_dist_param=200, det_dist_param=100, fan_beam_param=a, radius_param=250, rec_size_param=128)
+    #print(setup.setup.get_det_size())
     out = setup.run(plane, rec_algorithm_param = "SIRT_CUDA")
 
-    final = out['rec']
 
-    plt.figure("REC")
-    plt.imshow(final, cmap="gray")
+    imwrite("semi_circ_{}_projs_{}_fanbeam.png".format(p,a), out['rec'])
+    #final = out['rec']
+    #plt.figure("REC")
+    #plt.imshow(final, cmap="gray")
     #print(np.min(final))
     #print(np.max(final))
 
 
-    plt.figure("SINO")
-    plt.imshow(out['sino'], cmap="gray")
+    #plt.figure("SINO")
+    #plt.imshow(out['sino'], cmap="gray")
 
-    plt.show()
+    #plt.show()
 
