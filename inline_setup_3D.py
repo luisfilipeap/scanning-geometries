@@ -2,7 +2,7 @@ from math import floor, radians, tan, atan2, sin, cos
 import numpy as np
 
 
-class InlineScanningSetup:
+class InlineScanningSetup3D:
     """
     This class represents a Compute Tomography (CT) inline scanning setup composed of a fixed X-ray source and detector
     for imaging objects passing on a conveyor belt.
@@ -32,12 +32,12 @@ class InlineScanningSetup:
 
         # src: the ray source
         srcX = np.linspace(-detector_cells / 2, detector_cells / 2, num=number_of_projections)
-        srcZ = np.linspace(h - object_size / 2, h - object_size / 2, num=number_of_projections)
+        srcZ = np.linspace(h - object_size[2] / 2, h - object_size[2] / 2, num=number_of_projections)
         srcY = np.linspace(0,0, num=number_of_projections)
 
         # d :  the center of the detector
         dX = np.linspace(-detector_cells / 2, detector_cells / 2, num=number_of_projections)
-        dZ = np.linspace(-object_size / 2, -object_size / 2, num=number_of_projections)
+        dZ = np.linspace(-object_size[2] / 2, -object_size[2] / 2, num=number_of_projections)
         dY = np.linspace(0, 0, num=number_of_projections)
 
         # u :  the vector between the centers of detector pixels 0 and 1
