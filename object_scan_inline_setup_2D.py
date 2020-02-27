@@ -50,6 +50,7 @@ class InlineScanningObject:
         acquisition.
         """
 
+
         self.vol_geom = astra.create_vol_geom(rec_size_param, rec_size_param)
 
         self.setup = InlineScanningSetup2D(alpha=alpha_param, detector_cells=n_cells_param,

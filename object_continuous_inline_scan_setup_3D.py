@@ -173,7 +173,7 @@ if __name__ == '__main__':
     p = 10
     a = 30
 
-    save = "rec"
+    save = "setup"
     src = "D:\\Datasets\\lamino_attachable\\"
     dest = "D:\\Datasets\\lamino_attachable_10_projs\\input\\"
 

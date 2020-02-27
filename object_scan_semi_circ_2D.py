@@ -66,8 +66,8 @@ class CircularScanningObject:
 if __name__ == '__main__':
 
 
-    p = 120
-    a = 45
+    p = 7
+    a = 60
 
     plane = imread("test.tif")
     plane = resize(plane, (128, 128))

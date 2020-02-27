@@ -37,7 +37,7 @@ class InlineScanningSetup2D:
         :param omega_total: total object rotation (in degrees) around its own axis between the first and the last projection
         acquisition.
         """
-
+        self.det_size = detector_cells
         h = (detector_cells / 2) / tan(radians(alpha / 2))
 
         # src: the ray source
